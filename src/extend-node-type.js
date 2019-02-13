@@ -361,7 +361,12 @@ module.exports = (
       },
     })
 
-    return resolve({
+    let extraTypes = {};
+    if (typeof pluginOptions.onExtendNodeType === 'function') {
+      extraTypes = pluginOptions.onExtendNodeType({ getHTML, getHTMLAst }) || {};
+    }
+
+    return resolve(Object.assign(extraTypes, {
       html: {
         type: GraphQLString,
         resolve(markdownNode) {
@@ -552,6 +557,6 @@ module.exports = (
           }
         },
       },
-    })
+    }))
   })
 }
